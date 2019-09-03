@@ -1,0 +1,19 @@
+{
+  "name": "filmfest-backend",
+  "version": "1.0.0",
+  "description": "the backend code for FilmFest app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/slunk3/filmfest-backend.git"
+  },
+  "author": "Nick Boyd",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/slunk3/filmfest-backend/issues"
+  },
+  "homepage": "https://github.com/slunk3/filmfest-backend#readme"
+}
