@@ -38,6 +38,25 @@ const Mutation = {
     });
     return user;
   },
+  async addFilm(parent, args, ctx, info) {
+    if (!ctx.request.userId) {
+      throw new Error(`You must be logged in!`);
+    }
+    const film = await ctx.db.mutation.createFilm(
+      {
+        data: {
+          user: {
+            connect: {
+              id: ctx.request.userId,
+            },
+          },
+          ...args,
+        },
+      },
+      info
+    );
+    return film;
+  },
 };
 
 module.exports = Mutation;

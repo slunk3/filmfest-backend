@@ -16,6 +16,7 @@ type Query {
 type Mutation {
   signup(email: String!, password: String!, name: String!): User!
   signin(email: String!, password: String!): User!
+  addFilm(title: String!, release_date: String, tmdb_id: Int!): Film!
 }
 
 type User {
@@ -32,7 +33,8 @@ type Film {
   id: ID!
   release_date: String
   title: String!
-  tmdb_id: String
+  tmdb_id: Int!
+  user: User!
 }
 
 type SuccessMessage {

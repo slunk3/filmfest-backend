@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/nick-boyd-1e269c/filmfest/dev
-# timestamp: Wed Sep 04 2019 14:07:49 GMT-0500 (CDT)
+# timestamp: Thu Sep 05 2019 15:32:48 GMT-0500 (CDT)
 
 type AggregateFilm {
   count: Int!
@@ -14,11 +14,16 @@ type BatchPayload {
   count: Long!
 }
 
+scalar DateTime
+
 type Film implements Node {
   id: ID!
   release_date: String
   title: String!
-  tmdb_id: String
+  tmdb_id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  user: User!
 }
 
 """A connection to a list of items."""
@@ -35,7 +40,8 @@ input FilmCreateInput {
   id: ID
   release_date: String
   title: String!
-  tmdb_id: String
+  tmdb_id: Int!
+  user: UserCreateOneInput!
 }
 
 """An edge in a connection."""
@@ -56,13 +62,19 @@ enum FilmOrderByInput {
   title_DESC
   tmdb_id_ASC
   tmdb_id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 type FilmPreviousValues {
   id: ID!
   release_date: String
   title: String!
-  tmdb_id: String
+  tmdb_id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type FilmSubscriptionPayload {
@@ -105,13 +117,14 @@ input FilmSubscriptionWhereInput {
 input FilmUpdateInput {
   release_date: String
   title: String
-  tmdb_id: String
+  tmdb_id: Int
+  user: UserUpdateOneRequiredInput
 }
 
 input FilmUpdateManyMutationInput {
   release_date: String
   title: String
-  tmdb_id: String
+  tmdb_id: Int
 }
 
 input FilmWhereInput {
@@ -243,46 +256,73 @@ input FilmWhereInput {
 
   """All values not ending with the given string."""
   title_not_ends_with: String
-  tmdb_id: String
+  tmdb_id: Int
 
   """All values that are not equal to given value."""
-  tmdb_id_not: String
+  tmdb_id_not: Int
 
   """All values that are contained in given list."""
-  tmdb_id_in: [String!]
+  tmdb_id_in: [Int!]
 
   """All values that are not contained in given list."""
-  tmdb_id_not_in: [String!]
+  tmdb_id_not_in: [Int!]
 
   """All values less than the given value."""
-  tmdb_id_lt: String
+  tmdb_id_lt: Int
 
   """All values less than or equal the given value."""
-  tmdb_id_lte: String
+  tmdb_id_lte: Int
 
   """All values greater than the given value."""
-  tmdb_id_gt: String
+  tmdb_id_gt: Int
 
   """All values greater than or equal the given value."""
-  tmdb_id_gte: String
+  tmdb_id_gte: Int
+  createdAt: DateTime
 
-  """All values containing the given string."""
-  tmdb_id_contains: String
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
 
-  """All values not containing the given string."""
-  tmdb_id_not_contains: String
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
 
-  """All values starting with the given string."""
-  tmdb_id_starts_with: String
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
 
-  """All values not starting with the given string."""
-  tmdb_id_not_starts_with: String
+  """All values less than the given value."""
+  createdAt_lt: DateTime
 
-  """All values ending with the given string."""
-  tmdb_id_ends_with: String
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
 
-  """All values not ending with the given string."""
-  tmdb_id_not_ends_with: String
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  user: UserWhereInput
 }
 
 input FilmWhereUniqueInput {
@@ -296,18 +336,18 @@ Long can represent values between -(2^63) and 2^63 - 1.
 scalar Long
 
 type Mutation {
-  createUser(data: UserCreateInput!): User!
   createFilm(data: FilmCreateInput!): Film!
-  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  createUser(data: UserCreateInput!): User!
   updateFilm(data: FilmUpdateInput!, where: FilmWhereUniqueInput!): Film
-  deleteUser(where: UserWhereUniqueInput!): User
+  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   deleteFilm(where: FilmWhereUniqueInput!): Film
-  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  deleteUser(where: UserWhereUniqueInput!): User
   upsertFilm(where: FilmWhereUniqueInput!, create: FilmCreateInput!, update: FilmUpdateInput!): Film!
-  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
+  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   updateManyFilms(data: FilmUpdateManyMutationInput!, where: FilmWhereInput): BatchPayload!
-  deleteManyUsers(where: UserWhereInput): BatchPayload!
+  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   deleteManyFilms(where: FilmWhereInput): BatchPayload!
+  deleteManyUsers(where: UserWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -347,12 +387,12 @@ enum Permission {
 }
 
 type Query {
-  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   films(where: FilmWhereInput, orderBy: FilmOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Film]!
-  user(where: UserWhereUniqueInput!): User
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   film(where: FilmWhereUniqueInput!): Film
-  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  user(where: UserWhereUniqueInput!): User
   filmsConnection(where: FilmWhereInput, orderBy: FilmOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FilmConnection!
+  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -362,8 +402,8 @@ type Query {
 }
 
 type Subscription {
-  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   film(where: FilmSubscriptionWhereInput): FilmSubscriptionPayload
+  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
 type User implements Node {
@@ -394,6 +434,11 @@ input UserCreateInput {
   resetToken: String
   resetTokenExpiry: Float
   permissions: UserCreatepermissionsInput
+}
+
+input UserCreateOneInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
 }
 
 input UserCreatepermissionsInput {
@@ -471,6 +516,15 @@ input UserSubscriptionWhereInput {
   node: UserWhereInput
 }
 
+input UserUpdateDataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserUpdatepermissionsInput
+}
+
 input UserUpdateInput {
   name: String
   email: String
@@ -489,8 +543,20 @@ input UserUpdateManyMutationInput {
   permissions: UserUpdatepermissionsInput
 }
 
+input UserUpdateOneRequiredInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateDataInput
+  upsert: UserUpsertNestedInput
+}
+
 input UserUpdatepermissionsInput {
   set: [Permission!]
+}
+
+input UserUpsertNestedInput {
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
 }
 
 input UserWhereInput {
