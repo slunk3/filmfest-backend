@@ -23,7 +23,7 @@ type Film {
   id: ID! @id @unique
   release_date: String
   title: String!
-  tmdb_id: Int!
+  tmdb_id: Int! @unique
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
   user: User!

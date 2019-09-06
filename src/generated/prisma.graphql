@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/nick-boyd-1e269c/filmfest/dev
-# timestamp: Thu Sep 05 2019 15:32:48 GMT-0500 (CDT)
+# timestamp: Thu Sep 05 2019 16:37:09 GMT-0500 (CDT)
 
 type AggregateFilm {
   count: Int!
@@ -327,6 +327,7 @@ input FilmWhereInput {
 
 input FilmWhereUniqueInput {
   id: ID
+  tmdb_id: Int
 }
 
 """
